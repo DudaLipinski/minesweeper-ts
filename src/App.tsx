@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react'
 import { Scoreboard } from './components/Scoreboard/Scoreboard'
 
 function App() {
@@ -8,6 +9,9 @@ function App() {
         levels={['beginner', 'intermediate', 'expert']}
         onReset={() => null}
         mines="010"
+        onChangeLevel={function (event: ChangeEvent<HTMLSelectElement>): void {
+          throw new Error('Function not implemented.')
+        }}
       />
     </div>
   )
