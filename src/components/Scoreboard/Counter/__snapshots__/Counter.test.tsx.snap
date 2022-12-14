@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Counter Should renders Counter 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-bcXHqe gmxfJB"
+  >
+    010
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Counter Should renders Counter correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-bcXHqe gmxfJB"
+  >
+    010
+  </div>
+</DocumentFragment>
+`;

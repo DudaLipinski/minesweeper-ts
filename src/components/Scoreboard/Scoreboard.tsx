@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import styled from 'styled-components'
 import { Reset } from './Reset/Reset'
+import { Counter } from './Counter/Counter'
 
 export interface ScoreboardProps {
   time: string
@@ -17,6 +18,7 @@ export const Scoreboard: FC<ScoreboardProps> = ({
 }) => (
   <Wrapper>
     <Reset onReset={onReset} />
+    <Counter children="10" />
   </Wrapper>
 )
 
