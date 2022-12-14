@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from 'react'
+import { ChangeEvent } from 'react'
 import styled from 'styled-components'
 
 const Select = styled.select`
@@ -17,7 +17,6 @@ const Option = styled.option`
   min-height: 1.2em;
   padding: 0 0.2vw 0.2vw;
 `
-
 export interface LevelProps {
   children: string[]
   value?: string
