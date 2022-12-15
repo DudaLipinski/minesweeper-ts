@@ -1,21 +1,5 @@
 import styled from 'styled-components'
 
-export interface LegendProps {
-  feature: string
-  firstAction: string
-  secondAction: string
-}
-
-export const Legend = ({ feature, firstAction, secondAction }: LegendProps) => (
-  <Parent>
-    <strong>{feature} </strong>
-    <FlagComboParent>
-      <FirstAction>{firstAction} </FirstAction>
-      {secondAction && <SecondAction>+ {secondAction}</SecondAction>}
-    </FlagComboParent>
-  </Parent>
-)
-
 const FlagComboParent = styled.code`
   background: #e3e3e3;
 `
@@ -33,3 +17,18 @@ const FirstAction = styled.span`
 const SecondAction = styled.span`
   color: #2a48ec;
 `
+export interface LegendProps {
+  feature: string
+  firstAction: string
+  secondAction: string
+}
+
+export const Legend = ({ feature, firstAction, secondAction }: LegendProps) => (
+  <Parent>
+    <strong>{feature} </strong>
+    <FlagComboParent>
+      <FirstAction>{firstAction} </FirstAction>
+      {secondAction && <SecondAction>+ {secondAction}</SecondAction>}
+    </FlagComboParent>
+  </Parent>
+)
