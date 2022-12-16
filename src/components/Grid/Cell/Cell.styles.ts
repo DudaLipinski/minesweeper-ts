@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Cell as CellType } from '../../../helpers/Field'
 
 interface ClosedFrameProps {
-  mouseDown: boolean
+  mouseDown?: boolean
 }
 
 export const transparent = 'rgba(0,0,0,0)'

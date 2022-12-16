@@ -2,7 +2,6 @@ import { ChangeEvent } from 'react'
 import { Scoreboard } from './components/Scoreboard/Scoreboard'
 import { Top } from './components/Top/Top'
 import { Cell } from './components/Grid/Cell/Cell'
-import { Coords } from '@helpers/Field'
 
 function App() {
   return (
