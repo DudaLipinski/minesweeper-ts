@@ -1,6 +1,10 @@
 import styled from 'styled-components'
 import { Cell as CellType } from '../../../helpers/Field'
 
+interface ClosedFrameProps {
+  mouseDown: boolean
+}
+
 export const transparent = 'rgba(0,0,0,0)'
 export const colors: { [key in CellType]: string } = {
   0: transparent,
@@ -32,6 +36,8 @@ export const ClosedFrame = styled.div`
   &:hover {
     filter: brightness(1.1);
   }
+  border-color: ${({ mouseDown = false }: ClosedFrameProps) =>
+    mouseDown ? 'transparent' : 'white #9e9e9e #9e9e9e white'};
 `
 export const RevealedFrame = styled(ClosedFrame)`
   border-color: #dddddd;

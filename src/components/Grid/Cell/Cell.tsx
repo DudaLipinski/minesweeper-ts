@@ -1,5 +1,6 @@
 import * as Styled from './Cell.styles'
 import { Cell as CellType, CellState, Coords } from '../../../helpers/Field'
+import { useMouseDown } from 'src/hooks/useMouseDown'
 
 export interface CellProps {
   children: CellType
@@ -12,8 +13,15 @@ export const checkCellIsActive = (cell: CellType): boolean =>
   [CellState.hidden, CellState.flag, CellState.weakFlag].includes(cell)
 
 export const Cell = ({ children, coords, ...rest }: CellProps) => {
+  const [mouseDown, setMouseDown, setMouseUp] = useMouseDown()
+
   const isActiveCell = checkCellIsActive(children)
-  const onClick = () => rest.onClick(coords)
+
+  const onClick = () => {
+    if (isActiveCell) {
+      rest.onClick(coords)
+    }
+  }
 
   const onContextMenu = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault()
@@ -22,19 +30,38 @@ export const Cell = ({ children, coords, ...rest }: CellProps) => {
     }
   }
 
+  const onMouseDown = () => {
+    if (isActiveCell) {
+      setMouseDown()
+    }
+  }
+
+  const onMouseUp = () => {
+    if (isActiveCell) {
+      setMouseUp()
+    }
+  }
+
   const props = {
     onClick,
     onContextMenu,
+    onMouseDown,
+    onMouseUp,
+    onMouseLeave: onMouseUp,
+    mouseDown,
     'data-testid': `${coords}`,
   }
 
   return <ComponentsMap {...props}>{children}</ComponentsMap>
 }
-
 interface ComponentsMapProps {
   children: CellType
   onClick: (event: React.MouseEvent<HTMLDivElement>) => void
   onContextMenu: (event: React.MouseEvent<HTMLDivElement>) => void
+  onMouseDown: () => void
+  onMouseUp: () => void
+  onMouseLeave: () => void
+  mouseDown: boolean
   'data-testid'?: string
 }
 
