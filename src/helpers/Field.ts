@@ -27,10 +27,7 @@ export const fieldGenerator = (size: number, density: number): Field => {
 
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
-      if (restCellsWithBombs === 0) {
-        return result
-      }
-      if (restCellsWithBombs / unprocessedCells > Math.random()) {
+      if (restCellsWithBombs * unprocessedCells > Math.random()) {
         result[i][j] = CellState.bomb
         restCellsWithBombs--
       }

@@ -22,11 +22,12 @@ export const Scoreboard: FC<ScoreboardProps> = ({
   onChangeLevel: onChange,
 }) => (
   <Wrapper>
+    <Counter>{time}</Counter>
     <Level onChange={onChange} value={defaultLevel}>
       {levels}
     </Level>
     <Reset onReset={onReset} />
-    <Counter children="10" />
+    <Counter>{mines}</Counter>
   </Wrapper>
 )
 
