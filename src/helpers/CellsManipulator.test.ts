@@ -1,29 +1,31 @@
+/* eslint-disable jest/valid-expect */
 import { CellState, Field } from './Field'
 import {
   incrementNeighbors,
   getNeighborsItems,
   checkItemField,
+  openCell,
 } from './CellsManipulator'
 
-const { empty, bomb } = CellState
+const { empty: e, hidden: h, bomb: b } = CellState
 
 describe('Check increment neighbors', () => {
   describe('incrementNeighbors', () => {
     it('Field with only one item', () => {
-      expect(incrementNeighbors([0, 0], [[bomb]])).toStrictEqual([[bomb]])
+      expect(incrementNeighbors([0, 0], [[b]])).toStrictEqual([[b]])
     })
     it('Should return a field 2x2 with two bombs', () => {
       expect(
         incrementNeighbors(
           [0, 0],
           [
-            [bomb, empty],
-            [empty, bomb],
+            [b, e],
+            [e, b],
           ]
         )
       ).toStrictEqual([
-        [bomb, 1],
-        [1, bomb],
+        [b, 1],
+        [1, b],
       ])
     })
     it('Should return a field 3x3 with one centered bomb', () => {
@@ -31,14 +33,14 @@ describe('Check increment neighbors', () => {
         incrementNeighbors(
           [1, 1],
           [
-            [empty, empty, empty],
-            [empty, bomb, empty],
-            [empty, empty, empty],
+            [e, e, e],
+            [e, b, e],
+            [e, e, e],
           ]
         )
       ).toStrictEqual([
         [1, 1, 1],
-        [1, bomb, 1],
+        [1, b, 1],
         [1, 1, 1],
       ])
     })
@@ -47,14 +49,14 @@ describe('Check increment neighbors', () => {
         incrementNeighbors(
           [1, 1],
           [
-            [0, 1, bomb],
-            [0, bomb, 1],
+            [0, 1, b],
+            [0, b, 1],
             [0, 0, 0],
           ]
         )
       ).toStrictEqual([
-        [1, 2, bomb],
-        [1, bomb, 2],
+        [1, 2, b],
+        [1, b, 2],
         [1, 1, 1],
       ])
     })
@@ -90,7 +92,7 @@ describe('Check neighbors selectors', () => {
 
 describe('checkIncrementField', () => {
   describe('Increment with a basic field', () => {
-    const field: Field = [[empty]]
+    const field: Field = [[e]]
 
     it('Should return false when Y is out of range', () => {
       expect(checkItemField([1, 0], field)).toBe(false)
@@ -104,11 +106,11 @@ describe('checkIncrementField', () => {
   })
   describe('Increment with big field', () => {
     const field: Field = [
-      [empty, empty, empty, empty, empty],
-      [empty, empty, empty, empty, empty],
-      [empty, empty, empty, empty, empty],
-      [empty, empty, empty, empty, empty],
-      [empty, empty, empty, empty, empty],
+      [e, e, e, e, e],
+      [e, e, e, e, e],
+      [e, e, e, e, e],
+      [e, e, e, e, e],
+      [e, e, e, e, e],
     ]
 
     it('Should return false when Y', () => {
@@ -126,10 +128,82 @@ describe('checkIncrementField', () => {
   })
 })
 
-// [
-//   [empty, empty, empty, empty, empty],
-//   [empty, empty, empty, empty, empty],
-//   [empty, empty, bomb, empty, empty],
-//   [empty, empty, empty, empty, empty],
-//   [empty, empty, empty, empty, empty],
-// ]
+describe('Open cell action', () => {
+  describe('Simple cases with loose', () => {
+    it('Should open cell with the bomb', () => {
+      expect(() =>
+        openCell(
+          [1, 1],
+          [
+            [h, h],
+            [h, h],
+          ],
+          [
+            [1, 1],
+            [1, b],
+          ]
+        )
+      ).toThrow('Game Over')
+    })
+  })
+  describe('Should open cell with state equals 1', () => {
+    const playerField = openCell(
+      [1, 1],
+      [
+        [h, h, h],
+        [h, h, h],
+        [h, h, h],
+      ],
+      [
+        [1, 1, 0],
+        [9, 1, 0],
+        [1, 1, 0],
+      ]
+    )
+    expect(playerField).toStrictEqual([
+      [h, h, h],
+      [h, 1, h],
+      [h, h, h],
+    ])
+  })
+  describe('Should open cell with state equals 3', () => {
+    const playerField = openCell(
+      [1, 1],
+      [
+        [h, h, h],
+        [h, h, h],
+        [h, h, h],
+      ],
+      [
+        [1, 1, 0],
+        [9, 3, 0],
+        [1, 1, 0],
+      ]
+    )
+    expect(playerField).toStrictEqual([
+      [h, h, h],
+      [h, 3, h],
+      [h, h, h],
+    ])
+  })
+  describe('Should open an empty cell', () => {
+    const playerField = openCell(
+      [1, 2],
+      [
+        [h, h, h],
+        [h, h, h],
+        [h, h, h],
+      ],
+      [
+        [1, 1, 0],
+        [9, 1, 0],
+        [1, 1, 0],
+      ]
+    )
+    expect(playerField).toStrictEqual([
+      [h, 1, 0],
+      [h, 1, 0],
+      [h, 1, 0],
+    ])
+  })
+})
