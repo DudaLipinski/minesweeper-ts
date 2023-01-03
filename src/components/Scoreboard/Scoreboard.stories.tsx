@@ -12,5 +12,5 @@ export const ScoreboardExample = Template.bind({})
 ScoreboardExample.args = {
   time: '000',
   levels: ['beginner', 'intermediate', 'expert'],
-  mines: '010',
+  bombs: '010',
 }

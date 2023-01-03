@@ -10,14 +10,14 @@ export interface ScoreboardProps {
   defaultLevel?: string
   onReset: () => void
   onChangeLevel: (event: ChangeEvent<HTMLSelectElement>) => void
-  mines: string
+  bombs: string
 }
 
 export const Scoreboard: FC<ScoreboardProps> = ({
   time,
   levels,
   onReset,
-  mines,
+  bombs,
   defaultLevel,
   onChangeLevel: onChange,
 }) => (
@@ -27,7 +27,7 @@ export const Scoreboard: FC<ScoreboardProps> = ({
       {levels}
     </Level>
     <Reset onReset={onReset} />
-    <Counter>{mines}</Counter>
+    <Counter>{bombs}</Counter>
   </Wrapper>
 )
 

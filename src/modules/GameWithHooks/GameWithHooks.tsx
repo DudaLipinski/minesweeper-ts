@@ -1,56 +1,25 @@
 import { Wrapper } from '../../components/Game/Wrapper'
 import { Top } from '../../components/Top/Top'
-import {
-  generateFieldWithDefaultState,
-  CellState,
-  Field,
-  Coords,
-  fieldGenerator,
-} from './../../helpers/Field'
 import { GameArea } from '../../components/Game/GameArea'
 import { Scoreboard } from '../../components/Scoreboard/Scoreboard'
 import { Grid } from '../../components/Grid/Grid'
 import { GameOver } from '../../components/Game/GameOver'
-import { GameLevels, LevelNames, GameSettings } from '../GameSettings'
-import { useState } from 'react'
-import { openCell } from './../../helpers/CellsManipulator'
+import { GameLevels, LevelNames } from '../GameSettings'
+import { useGame } from 'src/hooks/useGame'
 
 export const GameWithHooks = () => {
-  const [level, setLevel] = useState<LevelNames>('beginner')
+  const {
+    level,
+    isGameOver,
+    isWin,
+    settings,
+    playerField,
+    onClick,
+    onChangeLevel,
+    onReset,
+  } = useGame()
 
-  const [size, bombs] = GameSettings[level]
-
-  const [playerField, setPlayerField] = useState<Field>(
-    generateFieldWithDefaultState(size, CellState.hidden)
-  )
-
-  const [gameField, setGameField] = useState<Field>(
-    fieldGenerator(size, bombs / (size * size))
-  )
-
-  const onClick = (coords: Coords) => {
-    const newPlayerField = openCell(coords, playerField, gameField)
-    setPlayerField([...newPlayerField])
-  }
-
-  const onChangeLevel = ({
-    target: { value: level },
-  }: React.ChangeEvent<HTMLSelectElement>) => {
-    setLevel(level as LevelNames)
-    const newSettings = GameSettings[level as LevelNames]
-
-    resetHandler(newSettings)
-  }
-
-  const resetHandler = ([size, bombs]: [number, number]) => {
-    const newGameField = fieldGenerator(size, bombs / (size * size))
-    const newPlayerField = generateFieldWithDefaultState(size, CellState.hidden)
-
-    setGameField([...newGameField])
-    setPlayerField([...newPlayerField])
-  }
-
-  const onReset = () => resetHandler([size, bombs])
+  const [, bombs] = settings
 
   return (
     <Wrapper>
@@ -60,13 +29,17 @@ export const GameWithHooks = () => {
       <GameArea>
         <Scoreboard
           time="0"
-          mines="10"
+          bombs={String(bombs)}
           levels={GameLevels as unknown as string[]}
           defaultLevel={level}
           onReset={onReset}
-          onChangeLevel={onChangeLevel}
+          onChangeLevel={({
+            target: { value: level },
+          }: React.ChangeEvent<HTMLSelectElement>) =>
+            onChangeLevel(level as LevelNames)
+          }
         ></Scoreboard>
-        <GameOver onClick={() => null} isWin={true} />
+        {isGameOver && <GameOver onClick={onReset} isWin={isWin} />}
         <Grid onClick={onClick} onContextMenu={() => null}>
           {playerField}
         </Grid>
