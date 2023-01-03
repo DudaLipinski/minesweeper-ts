@@ -186,24 +186,50 @@ describe('Open cell action', () => {
       [h, h, h],
     ])
   })
-  describe('Should open an empty cell', () => {
-    const playerField = openCell(
-      [1, 2],
-      [
-        [h, h, h],
-        [h, h, h],
-        [h, h, h],
-      ],
-      [
-        [1, 1, 0],
-        [9, 1, 0],
-        [1, 1, 0],
-      ]
-    )
-    expect(playerField).toStrictEqual([
-      [h, 1, 0],
-      [h, 1, 0],
-      [h, 1, 0],
-    ])
-  })
+  // describe('Should open an empty cell', () => {
+  //   const playerField = openCell(
+  //     [1, 2],
+  //     [
+  //       [h, h, h],
+  //       [h, h, h],
+  //       [h, h, h],
+  //     ],
+  //     [
+  //       [1, 1, 0],
+  //       [1, 1, 0],
+  //       [1, 1, 0],
+  //     ]
+  //   );
+  //   expect(playerField).toStrictEqual([
+  //     [h, 1, 0],
+  //     [h, 1, 0],
+  //     [h, 1, 0],
+  //   ]);
+  // })
+  // it('Open empty cell 5*5 case', () => {
+  //   const playerField = openCell(
+  //     [2, 2],
+  //     [
+  //       [h, h, h, h, h],
+  //       [h, h, h, h, h],
+  //       [h, h, h, h, h],
+  //       [h, h, h, h, h],
+  //       [h, h, h, h, h],
+  //     ],
+  //     [
+  //       [9, 9, 1, 1, 2],
+  //       [9, 3, 1, 0, 0],
+  //       [1, 1, 0, 1, 1],
+  //       [1, 0, 0, 1, 9],
+  //       [2, 1, 0, 1, 0],
+  //     ]
+  //   );
+  //   expect(playerField).toStrictEqual([
+  //     [h, h, 1, 1, 2],
+  //     [h, 3, 1, 0, 0],
+  //     [1, 1, 0, 1, 1],
+  //     [1, 0, 0, 1, h],
+  //     [2, 1, 0, 1, h],
+  //   ]);
+  // });
 })

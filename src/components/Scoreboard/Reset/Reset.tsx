@@ -1,7 +1,7 @@
 import { useMouseDown } from 'src/hooks/useMouseDown'
 import styled from 'styled-components'
 
-const Button = styled.div`
+const Button = styled.button`
   width: fit-content;
   font-size: 1.5vw;
   cursor: pointer;
