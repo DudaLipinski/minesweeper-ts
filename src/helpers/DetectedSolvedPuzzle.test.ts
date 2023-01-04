@@ -1,7 +1,7 @@
 import { detectSolvedPuzzle } from './DetectedSolvedPuzzle'
 import { CellState, Field } from './Field'
 
-const { empty: e, hidden: h, bomb: b, flag: f } = CellState
+const { empty: e, hidden: h, bomb: b, flag: f, weakFlag: w } = CellState
 
 describe('Detect solved puzzle function test cases', () => {
   it('Simplest 3*3 case', () => {
@@ -48,9 +48,9 @@ describe('Detect solved puzzle function test cases', () => {
     ]
 
     const playerField: Field = [
-      [1, 1, h],
-      [f, 1, h],
-      [1, 1, h],
+      [1, h, e],
+      [f, 1, e],
+      [1, 1, e],
     ]
 
     const [isSolved, flagCounter] = detectSolvedPuzzle(playerField, gameField)

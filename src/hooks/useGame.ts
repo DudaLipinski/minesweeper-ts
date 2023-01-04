@@ -5,11 +5,10 @@ import {
   fieldGenerator,
   Coords,
 } from '../helpers/Field'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { LevelNames, GameSettings } from 'src/modules/GameSettings'
 import { openCell } from '../helpers/openCell'
 import { setFlag } from '../helpers/setFlag'
-
 interface ReturnType {
   level: LevelNames
   isGameOver: boolean
@@ -29,6 +28,11 @@ export const useGame = (): ReturnType => {
   const [isGameOver, setIsGameOver] = useState(false)
   const [isWin, setIsWin] = useState(false)
 
+  const setGameOver = (isSolved = false) => {
+    setIsGameOver(true)
+    setIsWin(isSolved)
+  }
+
   const [size, bombs] = GameSettings[level]
 
   const [playerField, setPlayerField] = useState<Field>(
@@ -39,25 +43,34 @@ export const useGame = (): ReturnType => {
     fieldGenerator(size, bombs / (size * size))
   )
 
+  //useMemo(() => console.log(gameField), [])
+
   const onClick = (coords: Coords) => {
     try {
-      const newPlayerField = openCell(coords, playerField, gameField)
+      const [newPlayerField, isSolved, flagCounter] = openCell(
+        coords,
+        playerField,
+        gameField
+      )
+      if (isSolved) {
+        setGameOver(isSolved)
+      }
       setPlayerField([...newPlayerField])
     } catch (e) {
       setPlayerField([...gameField])
-      setIsGameOver(true)
+      setGameOver(false)
     }
   }
 
-  const onChangeLevel = (level: LevelNames) => {
-    setLevel(level as LevelNames)
-    const newSettings = GameSettings[level as LevelNames]
-
-    resetHandler(newSettings)
-  }
-
   const onContextMenu = (coords: Coords) => {
-    const newPlayerField = setFlag(coords, playerField, gameField)
+    const [newPlayerField, isSolved, flagCounter] = setFlag(
+      coords,
+      playerField,
+      gameField
+    )
+    if (isSolved) {
+      setGameOver(isSolved)
+    }
     setPlayerField([...newPlayerField])
   }
 
@@ -69,6 +82,12 @@ export const useGame = (): ReturnType => {
     setPlayerField([...newPlayerField])
     setIsGameOver(false)
     setIsWin(false)
+  }
+
+  const onChangeLevel = (level: LevelNames) => {
+    setLevel(level)
+    const newSettings = GameSettings[level]
+    resetHandler(newSettings)
   }
 
   const onReset = () => resetHandler([size, bombs])
