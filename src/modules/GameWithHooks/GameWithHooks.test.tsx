@@ -6,6 +6,7 @@ import { GameWithHooks } from './GameWithHooks'
 const mockOnClick = jest.fn()
 const mockOnChangeLevel = jest.fn()
 const mockOnReset = jest.fn()
+const mockOnContextMenu = jest.fn()
 
 jest.mock('../../hooks/useGame', () => ({
   useGame: () => ({
@@ -18,6 +19,7 @@ jest.mock('../../hooks/useGame', () => ({
       [10, 10],
     ],
     onClick: mockOnClick,
+    onContextMenu: mockOnContextMenu,
     onChangeLevel: mockOnChangeLevel,
     onReset: mockOnReset,
   }),
@@ -47,5 +49,10 @@ describe('GameWithHooks test cases', () => {
     render(<GameWithHooks />)
     userEvent.click(screen.getByText('🙁'))
     expect(mockOnReset).toHaveBeenCalled()
+  })
+  it('Should handler context menu when the right mouse button is clicked', () => {
+    render(<GameWithHooks />)
+    userEvent.click(screen.getByTestId('0,0'), { button: 2 })
+    expect(mockOnContextMenu).toHaveBeenCalled()
   })
 })

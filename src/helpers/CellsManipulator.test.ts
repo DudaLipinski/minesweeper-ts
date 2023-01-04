@@ -4,10 +4,9 @@ import {
   incrementNeighbors,
   getNeighborsItems,
   checkItemField,
-  openCell,
 } from './CellsManipulator'
 
-const { empty: e, hidden: h, bomb: b } = CellState
+const { empty: e, bomb: b } = CellState
 
 describe('Check increment neighbors', () => {
   describe('incrementNeighbors', () => {
@@ -126,110 +125,4 @@ describe('checkIncrementField', () => {
       expect(checkItemField([3, 4], field)).toBe(true)
     })
   })
-})
-
-describe('Open cell action', () => {
-  describe('Simple cases with loose', () => {
-    it('Should open cell with the bomb', () => {
-      expect(() =>
-        openCell(
-          [1, 1],
-          [
-            [h, h],
-            [h, h],
-          ],
-          [
-            [1, 1],
-            [1, b],
-          ]
-        )
-      ).toThrow('Game Over')
-    })
-  })
-  describe('Should open cell with state equals 1', () => {
-    const playerField = openCell(
-      [1, 1],
-      [
-        [h, h, h],
-        [h, h, h],
-        [h, h, h],
-      ],
-      [
-        [1, 1, 0],
-        [9, 1, 0],
-        [1, 1, 0],
-      ]
-    )
-    expect(playerField).toStrictEqual([
-      [h, h, h],
-      [h, 1, h],
-      [h, h, h],
-    ])
-  })
-  describe('Should open cell with state equals 3', () => {
-    const playerField = openCell(
-      [1, 1],
-      [
-        [h, h, h],
-        [h, h, h],
-        [h, h, h],
-      ],
-      [
-        [1, 1, 0],
-        [9, 3, 0],
-        [1, 1, 0],
-      ]
-    )
-    expect(playerField).toStrictEqual([
-      [h, h, h],
-      [h, 3, h],
-      [h, h, h],
-    ])
-  })
-  // describe('Should open an empty cell', () => {
-  //   const playerField = openCell(
-  //     [1, 2],
-  //     [
-  //       [h, h, h],
-  //       [h, h, h],
-  //       [h, h, h],
-  //     ],
-  //     [
-  //       [1, 1, 0],
-  //       [1, 1, 0],
-  //       [1, 1, 0],
-  //     ]
-  //   );
-  //   expect(playerField).toStrictEqual([
-  //     [h, 1, 0],
-  //     [h, 1, 0],
-  //     [h, 1, 0],
-  //   ]);
-  // })
-  // it('Open empty cell 5*5 case', () => {
-  //   const playerField = openCell(
-  //     [2, 2],
-  //     [
-  //       [h, h, h, h, h],
-  //       [h, h, h, h, h],
-  //       [h, h, h, h, h],
-  //       [h, h, h, h, h],
-  //       [h, h, h, h, h],
-  //     ],
-  //     [
-  //       [9, 9, 1, 1, 2],
-  //       [9, 3, 1, 0, 0],
-  //       [1, 1, 0, 1, 1],
-  //       [1, 0, 0, 1, 9],
-  //       [2, 1, 0, 1, 0],
-  //     ]
-  //   );
-  //   expect(playerField).toStrictEqual([
-  //     [h, h, 1, 1, 2],
-  //     [h, 3, 1, 0, 0],
-  //     [1, 1, 0, 1, 1],
-  //     [1, 0, 0, 1, h],
-  //     [2, 1, 0, 1, h],
-  //   ]);
-  // });
 })

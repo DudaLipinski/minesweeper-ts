@@ -35,44 +35,44 @@ describe('useGame test cases', () => {
       expect(beginnerPlayerField).toHaveLength(9)
 
       act(() => onChangeLevel(intermediate))
-
       const { playerField: intermediatePlayerField } = result.current
-
       expect(intermediatePlayerField).toHaveLength(16)
 
       act(() => onChangeLevel(expert))
-
       const { playerField: expertPlayerField } = result.current
-
       expect(expertPlayerField).toHaveLength(22)
     })
   })
   describe('Open cell test cases', () => {
     it('Open empty cell on the beginner level', () => {
       const { result } = renderHook(useGame)
-
       const { playerField, onClick } = result.current
 
       expect(playerField).toHaveLength(9)
       expect(flatWithFilter(playerField, e)).toHaveLength(0)
 
       act(() => onClick([0, 0]))
+      const { playerField: newPlayerField } = result.current
+      expect(flatWithFilter(newPlayerField, e)).toHaveLength(18)
+    })
+    it('Context menu handler', () => {
+      const { result } = renderHook(useGame)
+      const { onContextMenu } = result.current
+
+      act(() => onContextMenu([0, 0]))
 
       const { playerField: newPlayerField } = result.current
 
-      expect(flatWithFilter(newPlayerField, e)).toHaveLength(18)
+      expect(flatWithFilter(newPlayerField, f)).toHaveLength(1)
     })
     it('Click to the non-empty cells area', () => {
       const { result } = renderHook(useGame)
-
       const { playerField, onClick } = result.current
 
       expect(flatWithFilter(playerField, 1)).toHaveLength(0)
 
       act(() => onClick([0, 8]))
-
       const { playerField: newPlayerField } = result.current
-
       expect(flatWithFilter(newPlayerField, 1)).toHaveLength(1)
     })
   })
@@ -114,7 +114,6 @@ describe('useGame test cases', () => {
       expect(playerField).toHaveLength(9)
 
       act(() => onClick([0, 8]))
-
       expect(flatWithFilter(playerField, 1)).toHaveLength(1)
 
       act(() => onClick([0, 0]))
@@ -139,15 +138,12 @@ describe('useGame test cases', () => {
   describe('Game over behavior', () => {
     it('Player loose the game', () => {
       const { result } = renderHook(useGame)
-
       const { playerField, onClick } = result.current
 
       act(() => onClick([0, 8]))
-
       expect(flatWithFilter(playerField, 1)).toHaveLength(1)
 
       act(() => onClick([0, 0]))
-
       expect(flatWithFilter(playerField, e)).toHaveLength(18)
 
       act(() => onClick([0, 7]))
