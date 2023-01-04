@@ -24,7 +24,8 @@
       "@helpers/*": [
         "./src/helpers/*"
       ]
-    }
+    },
+    "downlevelIteration": true,
   },
   "include": [
     "src"
