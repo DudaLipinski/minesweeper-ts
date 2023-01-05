@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Cell as CellType } from '../../../helpers/Field'
+import { Cell as CellType } from './../../../core/Field'
 
 interface ClosedFrameProps {
   mouseDown?: boolean

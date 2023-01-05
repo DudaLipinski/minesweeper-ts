@@ -5,7 +5,7 @@ import { Scoreboard } from '../../components/Scoreboard/Scoreboard'
 import { Grid } from '../../components/Grid/Grid'
 import { GameOver } from '../../components/Game/GameOver'
 import { GameLevels, LevelNames } from '../GameSettings'
-import { useGame } from 'src/hooks/useGame'
+import { useGame } from 'src/modules/GameWithHooks/useGame'
 
 export const GameWithHooks = () => {
   const {

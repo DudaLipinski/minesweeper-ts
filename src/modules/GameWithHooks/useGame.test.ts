@@ -1,9 +1,9 @@
-import { CellState, Field } from '../helpers/Field'
+import { CellState, Field } from '../../core/Field'
 import { renderHook, act } from '@testing-library/react'
 import { GameLevels, GameSettings } from 'src/modules/GameSettings'
 import { useGame } from './useGame'
 
-jest.mock('../helpers/Field')
+jest.mock('./../../core/Field.ts')
 
 const { empty: e, hidden: h, bomb: b, flag: f } = CellState
 
@@ -178,6 +178,34 @@ describe('useGame test cases', () => {
           const gameCell = gameField[y][x]
           act(() => {
             gameCell !== b ? onClick([y, x]) : onContextMenu([y, x])
+          })
+        }
+      }
+
+      const { isGameOver, isWin } = result.current
+
+      expect(isWin).toBe(true)
+      expect(isGameOver).toBe(true)
+    })
+    it('Player win the game when open the last cell', () => {
+      const { result } = renderHook(useGame)
+
+      const { gameField, onClick, onContextMenu } = result.current
+
+      for (const y of gameField.keys()) {
+        for (const x of gameField[y].keys()) {
+          const gameCell = gameField[y][x]
+          act(() => {
+            gameCell === b && onContextMenu([y, x])
+          })
+        }
+      }
+
+      for (const y of gameField.keys()) {
+        for (const x of gameField[y].keys()) {
+          const gameCell = gameField[y][x]
+          act(() => {
+            gameCell !== b && onClick([y, x])
           })
         }
       }

@@ -4,11 +4,11 @@ import {
   CellState,
   fieldGenerator,
   Coords,
-} from '../helpers/Field'
+} from '../../core/Field'
 import { useEffect, useState } from 'react'
 import { LevelNames, GameSettings } from 'src/modules/GameSettings'
-import { openCell } from '../helpers/openCell'
-import { setFlag } from '../helpers/setFlag'
+import { openCell } from '../../core/openCell'
+import { setFlag } from '../../core/setFlag'
 interface ReturnType {
   level: LevelNames
   isGameOver: boolean
@@ -65,8 +65,6 @@ export const useGame = (): ReturnType => {
       clearInterval(interval)
     }
   }, [isGameOver, isGameStarted, time])
-
-  //useMemo(() => console.log(gameField), [])
 
   const onClick = (coords: Coords) => {
     !isGameStarted && setIsGameStarted(true)

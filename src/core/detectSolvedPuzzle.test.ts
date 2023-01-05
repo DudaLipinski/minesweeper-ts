@@ -1,7 +1,7 @@
-import { detectSolvedPuzzle } from './DetectedSolvedPuzzle'
+import { detectSolvedPuzzle } from './detectSolvedPuzzle'
 import { CellState, Field } from './Field'
 
-const { empty: e, hidden: h, bomb: b, flag: f, weakFlag: w } = CellState
+const { empty: e, hidden: h, bomb: b, flag: f } = CellState
 
 describe('Detect solved puzzle function test cases', () => {
   it('Simplest 3*3 case', () => {

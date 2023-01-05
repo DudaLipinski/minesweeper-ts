@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Coords, Field } from '@helpers/Field'
+import { Coords, Field } from './../../core/Field'
 import { Cell } from './Cell/Cell'
 
 export interface GridProps {

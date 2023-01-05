@@ -1,6 +1,6 @@
 /* eslint-disable jest/no-conditional-expect */
 import { render, screen, fireEvent, createEvent } from '@testing-library/react'
-import { CellState, Coords } from '../../../helpers/Field'
+import { CellState, Coords } from './../../../core/Field'
 import { Cell } from './Cell'
 
 describe('Cell component check', () => {
@@ -23,22 +23,5 @@ describe('Cell component check', () => {
 
       expect(contextMenuEvent.defaultPrevented).toBe(true)
     })
-
-    // it('Should call onClick and onContextMenu handler for active cells', () => {
-    //   render(<Cell {...props}>{cell}</Cell>)
-
-    //   const cellComp = screen.getByTestId(`${coords}`)
-
-    //   fireEvent.click(cellComp)
-    //   fireEvent.contextMenu(cellComp)
-
-    //   if (checkCellIsActive(cell)) {
-    //     expect(props.onClick).toBeCalled()
-    //     expect(props.onContextMenu).toBeCalled()
-    //   } else {
-    //     expect(props.onClick).not.toBeCalled()
-    //     expect(props.onContextMenu).not.toBeCalled()
-    //   }
-    // })
   }
 })

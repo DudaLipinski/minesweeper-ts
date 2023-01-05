@@ -1,4 +1,4 @@
-import { useMouseDown } from 'src/hooks/useMouseDown'
+import { useMouseDown } from 'src/components/hooks/useMouseDown'
 import styled from 'styled-components'
 
 const Button = styled.button`

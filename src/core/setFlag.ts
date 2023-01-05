@@ -1,4 +1,4 @@
-import { detectSolvedPuzzle } from './DetectedSolvedPuzzle'
+import { detectSolvedPuzzle } from './detectSolvedPuzzle'
 import { Coords, Field, CellState } from './Field'
 
 export const setFlag = (
