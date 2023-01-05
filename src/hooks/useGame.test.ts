@@ -188,4 +188,98 @@ describe('useGame test cases', () => {
       expect(isGameOver).toBe(true)
     })
   })
+  describe('Scoreboard behavior - timer and bomb counter', () => {
+    it('Should start the timer when a cell is clicked', () => {
+      jest.useFakeTimers()
+
+      const { result } = renderHook(useGame)
+      const timeMustPass = 5
+
+      for (let i = 0; i < timeMustPass; i++) {
+        act(() => {
+          jest.advanceTimersByTime(1000)
+        })
+      }
+
+      expect(result.current.time).toBe(0)
+
+      act(() => {
+        result.current.onClick([0, 0])
+      })
+
+      for (let i = 0; i < timeMustPass; i++) {
+        act(() => {
+          jest.advanceTimersByTime(1000)
+        })
+      }
+
+      expect(result.current.time).toBe(5)
+    })
+    it('Should start the timer when a cell is marked by a flag', () => {
+      jest.useFakeTimers()
+
+      const { result } = renderHook(useGame)
+      const timeMustPass = 5
+
+      for (let i = 0; i < timeMustPass; i++) {
+        act(() => {
+          jest.advanceTimersByTime(1000)
+        })
+      }
+
+      expect(result.current.time).toBe(0)
+
+      act(() => {
+        result.current.onContextMenu([0, 0])
+      })
+
+      for (let i = 0; i < timeMustPass; i++) {
+        act(() => {
+          jest.advanceTimersByTime(1000)
+        })
+      }
+
+      expect(result.current.time).toBe(5)
+    })
+    it('Should reset the timer when onReset have been called', () => {
+      jest.useFakeTimers()
+
+      const { result } = renderHook(useGame)
+      expect(result.current.time).toBe(0)
+
+      act(() => {
+        result.current.onContextMenu([0, 0])
+      })
+
+      const timeMustPass = 5
+
+      for (let i = 0; i < timeMustPass; i++) {
+        act(() => {
+          jest.advanceTimersByTime(1000)
+        })
+      }
+
+      expect(result.current.time).toBe(timeMustPass)
+      act(result.current.onReset)
+      expect(result.current.time).toBe(0)
+    })
+    it('flagCounter increase when onContextMenu calls', () => {
+      const { result } = renderHook(useGame)
+
+      act(() => result.current.onContextMenu([0, 0]))
+      expect(result.current.flagCounter).toBe(1)
+    })
+    it('flagCounter should stop when flagCounter > bombs', () => {
+      const { result } = renderHook(useGame)
+
+      expect(result.current.time).toBe(0)
+
+      for (let y = 0; y < 3; y++) {
+        for (let x = 0; x < 4; x++) {
+          act(() => result.current.onContextMenu([y, x]))
+        }
+      }
+      expect(result.current.flagCounter).toBe(10)
+    })
+  })
 })

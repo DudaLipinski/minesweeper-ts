@@ -14,6 +14,8 @@ export const GameWithHooks = () => {
     isWin,
     settings,
     playerField,
+    time,
+    flagCounter,
     onClick,
     onContextMenu,
     onChangeLevel,
@@ -29,8 +31,8 @@ export const GameWithHooks = () => {
       </Top>
       <GameArea>
         <Scoreboard
-          time="0"
-          bombs={String(bombs)}
+          time={String(time)}
+          bombs={String(bombs - flagCounter)}
           levels={GameLevels as unknown as string[]}
           defaultLevel={level}
           onReset={onReset}
