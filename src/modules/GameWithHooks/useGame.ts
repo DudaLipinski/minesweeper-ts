@@ -5,10 +5,13 @@ import {
   fieldGenerator,
   Coords,
 } from '../../core/Field'
-import { useEffect, useState } from 'react'
-import { LevelNames, GameSettings } from 'src/modules/GameSettings'
+import { useState } from 'react'
+import { LevelNames } from 'src/modules/GameSettings'
 import { openCell } from '../../core/openCell'
 import { setFlag } from '../../core/setFlag'
+import { useTime } from './useTime'
+import { useStatus } from './useStatus'
+import { useSettings } from './useSettings'
 interface ReturnType {
   level: LevelNames
   isGameOver: boolean
@@ -25,20 +28,24 @@ interface ReturnType {
 }
 
 export const useGame = (): ReturnType => {
-  const [level, setLevel] = useState<LevelNames>('beginner')
+  const {
+    isGameStarted,
+    isWin,
+    isGameOver,
+    setNewGame,
+    setInProgress,
+    setGameWin,
+    setGameLoose,
+  } = useStatus()
 
-  const [isGameOver, setIsGameOver] = useState(false)
-  const [isWin, setIsWin] = useState(false)
-  const [time, setTime] = useState(0)
-  const [isGameStarted, setIsGameStarted] = useState(false)
+  const {
+    settings: [size, bombs],
+    level,
+    setLevel,
+  } = useSettings()
+
+  const [time, resetTime] = useTime(isGameStarted, isGameOver)
   const [flagCounter, setFlagCounter] = useState(0)
-
-  const setGameOver = (isSolved = false) => {
-    setIsGameOver(true)
-    setIsWin(isSolved)
-  }
-
-  const [size, bombs] = GameSettings[level]
 
   const [playerField, setPlayerField] = useState<Field>(
     generateFieldWithDefaultState(size, CellState.hidden)
@@ -48,26 +55,8 @@ export const useGame = (): ReturnType => {
     fieldGenerator(size, bombs / (size * size))
   )
 
-  useEffect(() => {
-    let interval: NodeJS.Timeout
-
-    if (isGameStarted) {
-      interval = setTimeout(() => {
-        setTime(time + 1)
-      }, 1000)
-
-      if (isGameOver) {
-        clearInterval(interval)
-      }
-    }
-
-    return () => {
-      clearInterval(interval)
-    }
-  }, [isGameOver, isGameStarted, time])
-
   const onClick = (coords: Coords) => {
-    !isGameStarted && setIsGameStarted(true)
+    !isGameStarted && setInProgress()
 
     try {
       const [newPlayerField, isSolved] = openCell(
@@ -76,17 +65,17 @@ export const useGame = (): ReturnType => {
         gameField
       )
       if (isSolved) {
-        setGameOver(isSolved)
+        setGameWin()
       }
       setPlayerField([...newPlayerField])
     } catch (e) {
       setPlayerField([...gameField])
-      setGameOver(false)
+      setGameLoose()
     }
   }
 
   const onContextMenu = (coords: Coords) => {
-    !isGameStarted && setIsGameStarted(true)
+    !isGameStarted && setInProgress()
 
     const [newPlayerField, isSolved, newFlagCounter] = setFlag(
       coords,
@@ -99,7 +88,7 @@ export const useGame = (): ReturnType => {
     setFlagCounter(newFlagCounter)
 
     if (isSolved) {
-      setGameOver(isSolved)
+      setGameWin()
     }
     setPlayerField([...newPlayerField])
   }
@@ -110,15 +99,12 @@ export const useGame = (): ReturnType => {
 
     setGameField([...newGameField])
     setPlayerField([...newPlayerField])
-    setIsGameOver(false)
-    setIsWin(false)
-    setIsGameStarted(false)
-    setTime(0)
+    setNewGame()
+    resetTime()
   }
 
   const onChangeLevel = (level: LevelNames) => {
-    setLevel(level)
-    const newSettings = GameSettings[level]
+    const newSettings = setLevel(level)
     resetHandler(newSettings)
   }
 
