@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import styled from 'styled-components'
 
 import { Coords, Field } from './../../core/Field'
@@ -9,7 +10,7 @@ export interface GridProps {
   onContextMenu: (coords: Coords) => void
 }
 
-export const Grid = ({ children, ...rest }: GridProps) => (
+export const Grid = memo(({ children, ...rest }: GridProps) => (
   <Wrapper size={children.length}>
     {children.map((row, y) =>
       row.map((cell, x) => (
@@ -19,7 +20,9 @@ export const Grid = ({ children, ...rest }: GridProps) => (
       ))
     )}
   </Wrapper>
-)
+))
+
+Grid.displayName = 'Grid'
 
 interface WrapperProps {
   size: number

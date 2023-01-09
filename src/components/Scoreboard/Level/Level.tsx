@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, memo } from 'react'
 import styled from 'styled-components'
 
 const Select = styled.select`
@@ -22,7 +22,7 @@ export interface LevelProps {
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void
 }
 
-export const Level = ({ children, value, onChange }: LevelProps) => (
+export const Level = memo(({ children, value, onChange }: LevelProps) => (
   <Select onChange={onChange} value={value}>
     {children.map((item: string) => (
       <Option key={item} value={item}>
@@ -30,6 +30,6 @@ export const Level = ({ children, value, onChange }: LevelProps) => (
       </Option>
     ))}
   </Select>
-)
+))
 
 Level.displayName = 'Level'

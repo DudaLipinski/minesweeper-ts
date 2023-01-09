@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from 'react'
+import { ChangeEvent } from 'react'
 import styled from 'styled-components'
 import { Reset } from './Reset/Reset'
 import { Counter } from './Counter/Counter'
@@ -13,14 +13,14 @@ export interface ScoreboardProps {
   bombs: string
 }
 
-export const Scoreboard: FC<ScoreboardProps> = ({
+export const Scoreboard = ({
   time,
   levels,
   onReset,
   bombs,
   defaultLevel,
   onChangeLevel: onChange,
-}) => (
+}: ScoreboardProps) => (
   <Wrapper>
     <Counter>{time}</Counter>
     <Level onChange={onChange} value={defaultLevel}>

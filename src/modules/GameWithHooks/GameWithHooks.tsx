@@ -6,6 +6,7 @@ import { Grid } from '../../components/Grid/Grid'
 import { GameOver } from '../../components/Game/GameOver'
 import { GameLevels, LevelNames } from '../GameSettings'
 import { useGame } from 'src/modules/GameWithHooks/useGame'
+import { useCallback } from 'react'
 
 export const GameWithHooks = () => {
   const {
@@ -24,6 +25,12 @@ export const GameWithHooks = () => {
 
   const [, bombs] = settings
 
+  const onChangeLevelHandler = useCallback(
+    ({ target: { value: level } }: React.ChangeEvent<HTMLSelectElement>) =>
+      onChangeLevel(level as LevelNames),
+    [onChangeLevel]
+  )
+
   return (
     <Wrapper>
       <Top feature="Flag" firstAction="right click" secondAction="">
@@ -36,11 +43,7 @@ export const GameWithHooks = () => {
           levels={GameLevels as unknown as string[]}
           defaultLevel={level}
           onReset={onReset}
-          onChangeLevel={({
-            target: { value: level },
-          }: React.ChangeEvent<HTMLSelectElement>) =>
-            onChangeLevel(level as LevelNames)
-          }
+          onChangeLevel={onChangeLevelHandler}
         ></Scoreboard>
         {isGameOver && <GameOver onClick={onReset} isWin={isWin} />}
         <Grid onClick={onClick} onContextMenu={onContextMenu}>

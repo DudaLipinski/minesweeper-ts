@@ -1,5 +1,5 @@
 import * as Styled from './Cell.styles'
-import React, { FC } from 'react'
+import React, { memo } from 'react'
 import { Cell as CellType, CellState, Coords } from './../../../core/Field'
 import { useMouseDown } from 'src/components/hooks/useMouseDown'
 export interface CellProps {
@@ -8,18 +8,36 @@ export interface CellProps {
   onClick: (coords: Coords) => void
   onContextMenu: (coords: Coords) => void
 }
-export const checkCellIsActive = (cell: CellType): boolean =>
+export const isActiveCell = (cell: CellType): boolean =>
   [CellState.hidden, CellState.flag, CellState.weakFlag].includes(cell)
-export const Cell: FC<CellProps> = ({ children, coords, ...rest }) => {
-  const isActiveCell = checkCellIsActive(children)
+
+export const areEqual = (
+  prevProps: CellProps,
+  nextProps: CellProps
+): boolean => {
+  const areEqualCoords =
+    prevProps.coords.filter((coord, index) => nextProps.coords[index] !== coord)
+      .length === 0
+
+  return (
+    prevProps.children === nextProps.children &&
+    areEqualCoords &&
+    prevProps.onClick === nextProps.onClick &&
+    prevProps.onContextMenu === nextProps.onContextMenu
+  )
+}
+
+export const Cell = memo(({ children, coords, ...rest }: CellProps) => {
   const [mouseDown, onMouseDown, onMouseUp] = useMouseDown()
   const onClick = () => rest.onClick(coords)
+
   const onContextMenu = (element: React.MouseEvent<HTMLDivElement>) => {
     element.preventDefault()
-    if (isActiveCell) {
+    if (isActiveCell(children)) {
       rest.onContextMenu(coords)
     }
   }
+
   const props = {
     onClick,
     onContextMenu,
@@ -31,7 +49,9 @@ export const Cell: FC<CellProps> = ({ children, coords, ...rest }) => {
     role: 'cell',
   }
   return <ComponentsMap {...props}>{children}</ComponentsMap>
-}
+}, areEqual)
+
+Cell.displayName = 'Cell'
 interface ComponentsMapProps {
   children: CellType
   onClick: (elem: React.MouseEvent<HTMLDivElement>) => void
@@ -44,7 +64,7 @@ interface ComponentsMapProps {
   role: string
 }
 
-const ComponentsMap: FC<ComponentsMapProps> = ({ children, ...rest }) => {
+const ComponentsMap = ({ children, ...rest }: ComponentsMapProps) => {
   const nonActiveProps = {
     onContextMenu: rest.onContextMenu,
     'data-testid': rest['data-testid'],

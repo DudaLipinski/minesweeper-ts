@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { useMouseDown } from 'src/components/hooks/useMouseDown'
 import styled from 'styled-components'
 
@@ -15,7 +16,7 @@ export interface ResetProps {
   onReset: () => void
 }
 
-export const Reset = ({ onReset }: ResetProps) => {
+export const Reset = memo(({ onReset }: ResetProps) => {
   const [mouseDown, onMouseDown, onMouseUp] = useMouseDown()
 
   return (
@@ -28,4 +29,6 @@ export const Reset = ({ onReset }: ResetProps) => {
       {mouseDown ? '😯' : '🙂'}
     </Button>
   )
-}
+})
+
+Reset.displayName = 'Reset'
