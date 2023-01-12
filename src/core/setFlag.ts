@@ -1,3 +1,4 @@
+import { copyField } from './copyField'
 import { detectSolvedPuzzle } from './detectSolvedPuzzle'
 import { Coords, Field, CellState } from './Field'
 
@@ -9,25 +10,27 @@ export const setFlag = (
   bombs: number
 ): [Field, boolean, number] => {
   const [y, x] = coords
-  const cell = playerField[y][x]
+  const newPlayerField = copyField(playerField)
+
+  const cell = newPlayerField[y][x]
 
   const { flag, weakFlag, hidden } = CellState
 
   switch (cell) {
     case flag:
-      playerField[y][x] = weakFlag
+      newPlayerField[y][x] = weakFlag
       break
     case weakFlag:
-      playerField[y][x] = hidden
+      newPlayerField[y][x] = hidden
       break
     case hidden:
       if (prevFlagCounter < bombs) {
-        playerField[y][x] = flag
+        newPlayerField[y][x] = flag
       }
       break
   }
 
-  const [isSolved, flagCounter] = detectSolvedPuzzle(playerField, gameField)
+  const [isSolved, flagCounter] = detectSolvedPuzzle(newPlayerField, gameField)
 
-  return [playerField, isSolved, flagCounter]
+  return [newPlayerField, isSolved, flagCounter]
 }

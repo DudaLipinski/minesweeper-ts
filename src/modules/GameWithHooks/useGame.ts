@@ -22,13 +22,22 @@ interface ReturnType {
   gameField: Field
   time: number
   flagCounter: number
+  isGameStarted: boolean
   onClick: (coords: Coords) => void
   onContextMenu: (coords: Coords) => void
   onChangeLevel: (level: LevelNames) => void
   onReset: () => void
 }
 
-export const useGame = (): ReturnType => {
+export const useGame = (
+  defaultLevel = 'beginner' as LevelNames
+): ReturnType => {
+  const {
+    settings: [size, bombs],
+    level,
+    setLevel,
+  } = useSettings(defaultLevel)
+
   const {
     isGameStarted,
     isWin,
@@ -39,13 +48,8 @@ export const useGame = (): ReturnType => {
     setGameLoose,
   } = useStatus()
 
-  const {
-    settings: [size, bombs],
-    level,
-    setLevel,
-  } = useSettings()
-
   const [time, resetTime] = useTime(isGameStarted, isGameOver)
+
   const [flagCounter, setFlagCounter] = useState(0)
 
   const [playerField, setPlayerField] = useState<Field>(
@@ -59,7 +63,6 @@ export const useGame = (): ReturnType => {
   const onClick = useCallback(
     (coords: Coords) => {
       !isGameStarted && setInProgress()
-
       try {
         const [newPlayerField, isSolved] = openCell(
           coords,
@@ -75,13 +78,20 @@ export const useGame = (): ReturnType => {
         setGameLoose()
       }
     },
-    [isGameStarted, isGameOver, isWin, level, flagCounter]
+    [
+      isGameStarted,
+      isGameOver,
+      isWin,
+      level,
+      flagCounter,
+      playerField,
+      gameField,
+    ]
   )
 
   const onContextMenu = useCallback(
     (coords: Coords) => {
       !isGameStarted && setInProgress()
-
       const [newPlayerField, isSolved, newFlagCounter] = setFlag(
         coords,
         playerField,
@@ -89,15 +99,21 @@ export const useGame = (): ReturnType => {
         flagCounter,
         bombs
       )
-
       setFlagCounter(newFlagCounter)
-
       if (isSolved) {
         setGameWin()
       }
       setPlayerField([...newPlayerField])
     },
-    [isGameStarted, isGameOver, isWin, level, flagCounter]
+    [
+      isGameStarted,
+      isGameOver,
+      isWin,
+      level,
+      flagCounter,
+      playerField,
+      gameField,
+    ]
   )
 
   const resetHandler = ([size, bombs]: [number, number]) => {
@@ -120,12 +136,13 @@ export const useGame = (): ReturnType => {
 
   return {
     level,
+    time,
     isGameOver,
+    isGameStarted,
     isWin,
     settings: [size, bombs],
     playerField,
     gameField,
-    time,
     flagCounter,
     onClick,
     onContextMenu,

@@ -10,6 +10,9 @@ const Frame = styled.div`
   letter-spacing: 0.08em;
   background: #333;
   text-shadow: 0 0 0.1vw #ec433c;
+  border-width: 0.15vw;
+  border-style: solid;
+  border-color: white #9e9e9e #9e9e9e white;
 `
 
 export interface CounterProps {

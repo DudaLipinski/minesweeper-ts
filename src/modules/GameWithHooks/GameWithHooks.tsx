@@ -1,5 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Wrapper } from '../../components/Game/Wrapper'
-import { Top } from '../../components/Top/Top'
 import { GameArea } from '../../components/Game/GameArea'
 import { Scoreboard } from '../../components/Scoreboard/Scoreboard'
 import { Grid } from '../../components/Grid/Grid'
@@ -7,8 +7,12 @@ import { GameOver } from '../../components/Game/GameOver'
 import { GameLevels, LevelNames } from '../GameSettings'
 import { useGame } from 'src/modules/GameWithHooks/useGame'
 import { useCallback } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 export const GameWithHooks = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const urlLevelParam = (searchParams.get('level') || undefined) as LevelNames
+
   const {
     level,
     isGameOver,
@@ -21,21 +25,20 @@ export const GameWithHooks = () => {
     onContextMenu,
     onChangeLevel,
     onReset,
-  } = useGame()
+  } = useGame(urlLevelParam)
 
   const [, bombs] = settings
 
   const onChangeLevelHandler = useCallback(
-    ({ target: { value: level } }: React.ChangeEvent<HTMLSelectElement>) =>
-      onChangeLevel(level as LevelNames),
+    ({ target: { value: level } }: React.ChangeEvent<HTMLSelectElement>) => {
+      setSearchParams({ level })
+      onChangeLevel(level as LevelNames)
+    },
     [onChangeLevel]
   )
 
   return (
     <Wrapper>
-      <Top feature="Flag" firstAction="right click" secondAction="">
-        Minesweeper
-      </Top>
       <GameArea>
         <Scoreboard
           time={String(time)}
