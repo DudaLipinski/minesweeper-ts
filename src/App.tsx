@@ -1,4 +1,4 @@
-import React from 'react'
+import { Provider } from 'react-redux'
 import {
   Link,
   Route,
@@ -6,8 +6,10 @@ import {
   Routes,
   useSearchParams,
 } from 'react-router-dom'
-import { GameWithHooks } from './modules/GameWithHooks/GameWithHooks'
 import { MinesweeperWithHooks } from './pages/MinesweeperWithHooks/MinesweeperWithHooks'
+import { MinesweeperWithReactRedux } from './pages/MinesweeperWithRedux/MinesweeperWithReactRedux'
+import { MinesweeperWithUseReducer } from './pages/MinesweeperWithUseReducer/MinesweeperWithReactRedux'
+import { store } from './store'
 
 const Navigation = () => {
   const [searchParams] = useSearchParams()
@@ -37,13 +39,13 @@ const Navigation = () => {
           </Link>
         </li>
         <li>
-          <Link to={getLocationObjWithSearchParams('/minesweeper/usereducer')}>
-            Game With useReducer
+          <Link to={getLocationObjWithSearchParams('/minesweeper/redux')}>
+            Game With Redux
           </Link>
         </li>
         <li>
-          <Link to={getLocationObjWithSearchParams('/minesweeper/reactredux')}>
-            Game With ReactRedux
+          <Link to={getLocationObjWithSearchParams('/minesweeper/usereducer')}>
+            Game With useReducer
           </Link>
         </li>
       </ul>
@@ -52,17 +54,22 @@ const Navigation = () => {
 }
 
 const App = () => (
-  <Router>
-    <Navigation />
-    <Routes>
-      <Route path="/" element={<Home />}></Route>
-      <Route path="/minesweeper">
-        <Route path="hooks" element={<MinesweeperWithHooks />}></Route>
-        <Route path="usereducer" element={<GameWithHooks />}></Route>
-        <Route path="reactredux" element={<GameWithHooks />}></Route>
-      </Route>
-    </Routes>
-  </Router>
+  <Provider store={store}>
+    <Router>
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/minesweeper">
+          <Route path="hooks" element={<MinesweeperWithHooks />}></Route>
+          <Route
+            path="usereducer"
+            element={<MinesweeperWithUseReducer />}
+          ></Route>
+          <Route path="redux" element={<MinesweeperWithReactRedux />}></Route>
+        </Route>
+      </Routes>
+    </Router>
+  </Provider>
 )
 
 const Home = () => <h1>Home</h1>
